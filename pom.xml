@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>dev.appladostudios.examples</groupId>
 	<artifactId>final-assignment</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>final-assignment</name>
 	<description>Final assignment for the Java Trainee Program</description>
 	<properties>
@@ -143,6 +143,6 @@
 	<scm>
 		<developerConnection>scm:git:https://github.com/estefaniag08/appst-final-assignment.git</developerConnection>
 		<url>https://github.com/estefaniag08/appst-final-assignment</url>
-		<tag>final-assignment-0.0.1</tag>
+		<tag>appst-final-assignment-0.0.1</tag>
 	</scm>
 </project>
