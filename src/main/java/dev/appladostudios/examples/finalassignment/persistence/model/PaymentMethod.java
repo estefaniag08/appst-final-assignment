@@ -1,4 +1,4 @@
-package dev.appladostudios.examples.finalassignment.web.controller.persistence.model;
+package dev.appladostudios.examples.finalassignment.persistence.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +14,9 @@ public class PaymentMethod {
 
     @NotEmpty(message = "Payment method name cannot be null or empty.")
     private String paymentMethodName;
+
+    @NotEmpty(message = "Payment description cannot be null or empty.")
+    private String paymentMethodDescription;
 
     private UUID token;
 

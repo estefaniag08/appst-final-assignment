@@ -1,6 +1,6 @@
-package dev.appladostudios.examples.finalassignment.web.controller.persistence.repository;
+package dev.appladostudios.examples.finalassignment.persistence.repository;
 
-import dev.appladostudios.examples.finalassignment.web.controller.persistence.model.Product;
+import dev.appladostudios.examples.finalassignment.persistence.model.Product;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

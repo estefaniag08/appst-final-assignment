@@ -1,4 +1,4 @@
-package dev.appladostudios.examples.finalassignment.web.controller.persistence.model;
+package dev.appladostudios.examples.finalassignment.persistence.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
