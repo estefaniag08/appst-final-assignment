@@ -15,6 +15,7 @@
 	<description>Final assignment for the Java Trainee Program</description>
 	<properties>
 		<java.version>18</java.version>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 	<dependencies>
 		<dependency>
