@@ -1,29 +1,18 @@
 package dev.appladostudios.examples.finalassignment.common;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ItemDto {
+    @EqualsAndHashCode.Include
     private final long code;
     private final String name;
-    private final int units;
+    private int units;
     private final Double unitPrice;
-
-    public ItemDto(long code, String name, int units, Double unitPrice) {
-        this.code = code;
-        this.name = name;
-        this.units = units;
-        this.unitPrice = unitPrice;
-    }
-
-    public double getPrice(){
-        return unitPrice;
-    }
-    public long getCode(){
-        return code;
-    }
-    public String getName(){
-        return name;
-    }
-    public int getUnits(){
-        return units;
-    }
-
 }

@@ -1,4 +1,4 @@
-package dev.appladostudios.examples.finalassignment.service;
+package dev.appladostudios.examples.finalassignment.config.service;
 
 import org.springframework.stereotype.Service;
 

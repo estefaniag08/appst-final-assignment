@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto{
-    private Long id;
-    private String productName;
-    private int stock;
-    private double pricePerUnit;
+public class PaymentDto {
+    private int id;
+    private String paymentMethodName;
+    private String paymentMethodDescription;
 }
