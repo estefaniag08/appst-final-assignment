@@ -55,9 +55,11 @@ public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter 
                 .antMatchers(HttpMethod.GET, "/**/actuator/health").permitAll()
                 .antMatchers(HttpMethod.GET, "/**/actuator/metrics").authenticated()
                 .antMatchers(HttpMethod.GET, "/**/actuator/loggers").authenticated()
-                .antMatchers("/actuator/**").denyAll();
-                //.and()
-                //    .csrf().disable()
+                .antMatchers("/actuator/**").denyAll()
+                .antMatchers("/order/**").authenticated()
+                .antMatchers("/product/**").authenticated()
+                .and()
+                    .csrf().disable();
 
     }
 }
