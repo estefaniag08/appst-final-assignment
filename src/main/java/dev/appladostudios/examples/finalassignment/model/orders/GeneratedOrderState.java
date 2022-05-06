@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class GeneratedOrderState implements IOrderState{
     @Override
-    public void handle(Order order) {
+    public void handle(SimpleOrder simpleOrder) {
         UUID uuid = UUID.randomUUID();
-        order.setOrderCode(uuid);
+        simpleOrder.setOrderCode(uuid);
     }
 }

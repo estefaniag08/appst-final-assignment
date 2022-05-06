@@ -1,11 +1,13 @@
 package dev.appladostudios.examples.finalassignment.persistence.model;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-
 import java.util.UUID;
 
 @Entity
+@Getter
 public class PaymentMethod {
 
     @Id

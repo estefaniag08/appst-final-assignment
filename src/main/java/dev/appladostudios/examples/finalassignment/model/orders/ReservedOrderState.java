@@ -5,8 +5,8 @@ import java.util.UUID;
 public class ReservedOrderState implements IOrderState{
 
     @Override
-    public void handle(Order order) {
+    public void handle(SimpleOrder simpleOrder) {
         UUID uuid = UUID.randomUUID();
-        order.setReservationCode(uuid);
+        simpleOrder.setReservationCode(uuid);
     }
 }

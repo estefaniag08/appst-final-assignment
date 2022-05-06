@@ -1,2 +1,5 @@
-package dev.appladostudios.examples.finalassignment.service;public class OrderService {
+package dev.appladostudios.examples.finalassignment.service;
+
+public class OrderService {
+
 }

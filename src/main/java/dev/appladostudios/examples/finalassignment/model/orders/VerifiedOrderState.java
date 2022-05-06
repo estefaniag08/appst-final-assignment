@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class VerifiedOrderState implements IOrderState{
     @Override
-    public void handle(Order order) {
+    public void handle(SimpleOrder simpleOrder) {
         UUID uuid = UUID.randomUUID();
-        order.setVerificationCode(uuid);
+        simpleOrder.setVerificationCode(uuid);
     }
 }

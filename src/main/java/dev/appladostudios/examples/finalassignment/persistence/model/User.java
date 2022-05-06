@@ -1,6 +1,8 @@
 package dev.appladostudios.examples.finalassignment.persistence.model;
 
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_store")
+@Getter
 public class User {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

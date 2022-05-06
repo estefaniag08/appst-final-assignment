@@ -1,2 +1,4 @@
-package dev.appladostudios.examples.finalassignment.persistence.model;public class PersistenceEntity {
+package dev.appladostudios.examples.finalassignment.persistence.model;
+
+public abstract class PersistenceEntity {
 }

@@ -1,2 +1,4 @@
-package dev.appladostudios.examples.finalassignment.common.exception;public class PaymentNotExistException {
+package dev.appladostudios.examples.finalassignment.common.exception;
+
+public class PaymentNotExistException {
 }

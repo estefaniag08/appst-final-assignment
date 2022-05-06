@@ -1,10 +1,15 @@
 package dev.appladostudios.examples.finalassignment.persistence.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetail {
 
     @Id

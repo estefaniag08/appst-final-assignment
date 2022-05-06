@@ -1,2 +1,4 @@
-package dev.appladostudios.examples.finalassignment.common.dto;public class CheckoutStatusDto {
+package dev.appladostudios.examples.finalassignment.common.dto;
+
+public class CheckoutStatusDto{
 }

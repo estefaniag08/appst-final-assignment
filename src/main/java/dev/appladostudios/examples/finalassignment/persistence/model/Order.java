@@ -1,5 +1,10 @@
 package dev.appladostudios.examples.finalassignment.persistence.model;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
@@ -8,7 +13,11 @@ import java.util.UUID;
 
 @Entity
 @Table( name = "order_store")
-public class Order {
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Setter
+public class Order extends PersistenceEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,4 +41,7 @@ public class Order {
     @ManyToOne
     @NotEmpty(message = "Payment method cannot be null or empty.")
     private PaymentMethod paymentMethod;
+
+    @ManyToOne
+    private User user;
 }

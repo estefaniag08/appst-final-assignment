@@ -1,18 +1,21 @@
-package dev.appladostudios.examples.finalassignment.common;
+package dev.appladostudios.examples.finalassignment.common.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ItemDto {
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class ItemDto extends Dto<Long> {
     @EqualsAndHashCode.Include
-    private final long code;
-    private final String name;
+    private Long code;
+    private String name;
     private int units;
-    private final Double unitPrice;
+    private Double unitPrice;
+
+    @Override
+    public Long getId() {
+        return this.code;
+    }
 }

@@ -1,4 +1,4 @@
-package dev.appladostudios.examples.finalassignment.common;
+package dev.appladostudios.examples.finalassignment.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto{
+public class ProductDto extends Dto<Long> {
     private Long id;
     private String productName;
     private int stock;

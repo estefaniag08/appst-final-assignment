@@ -9,14 +9,14 @@ import java.util.*;
 
 @Getter
 @Setter
-public class Order{
+public class SimpleOrder {
     @Setter(value = AccessLevel.NONE)
     protected ItemOrderList orderList;
     private UUID reservationCode;
     private UUID verificationCode;
     private UUID orderCode;
 
-    public Order(List<ItemDto> itemList){
+    public SimpleOrder(List<ItemDto> itemList){
         orderList = new ItemOrderList(itemList);
     }
 
