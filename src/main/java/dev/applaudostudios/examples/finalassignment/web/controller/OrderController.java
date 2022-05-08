@@ -29,7 +29,7 @@ public class OrderController {
 
     @RequestMapping( method = RequestMethod.POST)
     public ResponseEntity<OrderDto> createOrder(@RequestBody final OrderDto orderDto, final BindingResult bindingResult){
-        checkoutService.initCheckout(1L, orderDto);
+        //checkoutService.initCheckout(1L, orderDto);
 
         return new ResponseEntity(orderDto, HttpStatus.CREATED);
     }
