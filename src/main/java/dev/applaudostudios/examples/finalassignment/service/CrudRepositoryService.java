@@ -1,7 +1,8 @@
-package dev.appladostudios.examples.finalassignment.service;
+package dev.applaudostudios.examples.finalassignment.service;
 
-import dev.appladostudios.examples.finalassignment.common.dto.Dto;
-import dev.appladostudios.examples.finalassignment.persistence.model.PersistenceEntity;
+import dev.applaudostudios.examples.finalassignment.common.Mappable;
+import dev.applaudostudios.examples.finalassignment.common.dto.Dto;
+import dev.applaudostudios.examples.finalassignment.persistence.model.PersistenceEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -9,11 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 
-public abstract class CrudService <T extends PersistenceEntity, TDto extends Dto<K>, K> implements Mappeable<T, TDto>{
+public abstract class CrudRepositoryService<T extends PersistenceEntity, TDto extends Dto<K>, K> implements Mappable<T, TDto> {
 
     private final CrudRepository<T,K> crudRepository;
 
-    public CrudService(CrudRepository<T,K> crudRepository){
+    public CrudRepositoryService(CrudRepository<T,K> crudRepository){
         this.crudRepository = crudRepository;
     }
     public TDto create(TDto entityDto){

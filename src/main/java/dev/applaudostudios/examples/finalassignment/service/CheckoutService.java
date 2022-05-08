@@ -1,10 +1,11 @@
-package dev.appladostudios.examples.finalassignment.service;
+package dev.applaudostudios.examples.finalassignment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.appladostudios.examples.finalassignment.common.dto.CheckoutStatusDto;
-import dev.appladostudios.examples.finalassignment.common.dto.OrderDto;
-import dev.appladostudios.examples.finalassignment.model.orders.SimpleOrder;
-import dev.appladostudios.examples.finalassignment.persistence.model.*;
+import dev.applaudostudios.examples.finalassignment.common.Mappable;
+import dev.applaudostudios.examples.finalassignment.common.dto.CheckoutStatusDto;
+import dev.applaudostudios.examples.finalassignment.common.dto.OrderDto;
+import dev.applaudostudios.examples.finalassignment.model.orders.SimpleOrder;
+import dev.applaudostudios.examples.finalassignment.persistence.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
-public class CheckoutService implements Mappeable<Order, OrderDto> {
+public class CheckoutService implements Mappable<Order, OrderDto> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -39,8 +40,8 @@ public class CheckoutService implements Mappeable<Order, OrderDto> {
         return objectMapper.convertValue(entityDto, Order.class);
     }
 
-    public boolean initCheckout(Long idUser, OrderDto orderDto){
-        User user = entityManager.find(User.class, idUser);
+    public boolean initCheckout(String userEmail, OrderDto orderDto){
+        User user = entityManager.find(User.class, userEmail);
         Order orderEntity;
         List<OrderDetail> orderDetails = new ArrayList<>();
 
@@ -91,11 +92,7 @@ public class CheckoutService implements Mappeable<Order, OrderDto> {
             Order order = entityManager.find(Order.class, idOrder);
             order.setAddress(address);
             entityManager.merge(order);
-            if(orderModel.validateOrder()){
-                // Ok
-            } else {
-                //Lanza error
-            }
+
         }
         return null;
     }

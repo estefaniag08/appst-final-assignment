@@ -1,15 +1,15 @@
-package dev.appladostudios.examples.finalassignment.service;
+package dev.applaudostudios.examples.finalassignment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.appladostudios.examples.finalassignment.common.dto.ProductDto;
-import dev.appladostudios.examples.finalassignment.persistence.model.Product;
+import dev.applaudostudios.examples.finalassignment.common.dto.ProductDto;
+import dev.applaudostudios.examples.finalassignment.persistence.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 @Service
-public class ProductService extends CrudService<Product, ProductDto, Long>{
+public class ProductService extends CrudRepositoryService<Product, ProductDto, Long> {
 
     @Autowired
     private ObjectMapper objectMapper;
