@@ -3,6 +3,8 @@ package dev.applaudostudios.examples.finalassignment.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.applaudostudios.examples.finalassignment.common.Mappable;
 import dev.applaudostudios.examples.finalassignment.common.dto.*;
+import dev.applaudostudios.examples.finalassignment.common.exception.service.ItemAlreadyExistsException;
+import dev.applaudostudios.examples.finalassignment.common.exception.service.ItemNotFoundException;
 import dev.applaudostudios.examples.finalassignment.model.orders.OrderFacade;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Order;
 import dev.applaudostudios.examples.finalassignment.persistence.query.OrderQueries;
@@ -56,12 +58,7 @@ public class CheckoutServices implements Mappable<Order, OrderDto> {
     public OrderDto saveAddress(String userEmailAddress, Long orderId, AddressDto addressDto) {
         UserDto user = userQueries.getUserFromEmail(userEmailAddress);
         OrderDto order = orderQueries.mapToDto(orderQueries.getOrderById(orderId));
-        for (ItemDto item : order.getOrderItems()
-        ) {
-            System.out.println(item.toString());
-        }
         AddressDto address = userQueries.getAddressFromUserId(user.getId(), addressDto.getId());
-
         order.setAddress(address);
         order = orderFacade.generateDispatchCode(order);
         return orderQueries.mapToDto(orderQueries.updateOrder(orderId, mapToEntity(order)));
@@ -93,11 +90,11 @@ public class CheckoutServices implements Mappable<Order, OrderDto> {
                 orderQueries.mapToDto(orderQueries.updateOrderItem(orderId, itemDto));
                 return orderQueries.mapToDto(orderQueries.updateOrder(orderId, mapToEntity(order)));
             } else {
-                deleteOrderItem(orderId, itemDto.getId());
+                //deleteOrderItem(orderId, itemDto.getId());
                 return null;
             }
         } else {
-            return null;
+            throw new ItemNotFoundException("Order item with code" + itemDto.getCode() + "");
         }
     }
 
@@ -117,8 +114,7 @@ public class CheckoutServices implements Mappable<Order, OrderDto> {
             orderQueries.mapToDto(orderQueries.addOrderItem(orderId, itemList.get(0)));
             return orderQueries.mapToDto(orderQueries.updateOrder(orderId, mapToEntity(order)));
         } else {
-
-            return null;
+            throw new ItemAlreadyExistsException("The order item with the given id already exists.");
         }
     }
 

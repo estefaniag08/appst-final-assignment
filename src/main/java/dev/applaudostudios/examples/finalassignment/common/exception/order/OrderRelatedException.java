@@ -1,10 +1,10 @@
-package dev.applaudostudios.examples.finalassignment.common.exception.user;
+package dev.applaudostudios.examples.finalassignment.common.exception.order;
 
 import dev.applaudostudios.examples.finalassignment.common.exception.RestException;
 import org.springframework.http.HttpStatus;
 
-public class UserRelatedException extends RuntimeException implements RestException {
-    public UserRelatedException(String message) {
+public class OrderRelatedException extends RuntimeException implements RestException {
+    public OrderRelatedException(String message) {
         super(message);
     }
 

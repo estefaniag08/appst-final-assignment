@@ -2,6 +2,7 @@ package dev.applaudostudios.examples.finalassignment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.applaudostudios.examples.finalassignment.common.dto.ProductDto;
+import dev.applaudostudios.examples.finalassignment.common.exception.product.ProductStockOutOfBoundException;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -27,8 +28,10 @@ public class ProductService extends CrudRepositoryService<Product, ProductDto, L
         if(newStock >= 0 && newStock<= foundEntity.get().getStock()){
             updateStock(foundEntity.get(), foundEntity.get().getStock()- newStock);
             return true;
+        } else {
+            throw new ProductStockOutOfBoundException("Stock (" + newStock
+                    +") couldn't be reserved because is out of bound [0,"+ foundEntity.get().getStock()+"]");
         }
-        return false;
     }
 
     public boolean returnStock(Long idProduct, int stockToReturn){
@@ -36,8 +39,11 @@ public class ProductService extends CrudRepositoryService<Product, ProductDto, L
         if(stockToReturn >= 0 && foundEntity.isPresent()){
             updateStock(foundEntity.get(), stockToReturn + foundEntity.get().getStock());
             return true;
+        } else {
+            throw new ProductStockOutOfBoundException("Stock (" + stockToReturn
+                    +") couldn't be returned because is out of bound.");
         }
-        return false;
+
     }
     @Override
     public ProductDto mapToDto(Product entity) {

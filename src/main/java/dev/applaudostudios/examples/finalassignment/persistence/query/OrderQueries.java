@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.applaudostudios.examples.finalassignment.common.Mappable;
 import dev.applaudostudios.examples.finalassignment.common.dto.ItemDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.OrderDto;
+import dev.applaudostudios.examples.finalassignment.common.exception.order.OrderItemNotFoundException;
+import dev.applaudostudios.examples.finalassignment.common.exception.order.OrderNotFoundException;
+import dev.applaudostudios.examples.finalassignment.common.exception.order.OrderRelatedException;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Order;
 import dev.applaudostudios.examples.finalassignment.persistence.model.OrderDetail;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Product;
@@ -31,9 +34,15 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
 
     public Order getOrderById(Long id) {
         try {
-            return entityManager.find(Order.class, id);
+            Order foundOrder = entityManager.find(Order.class, id);
+            if(foundOrder != null){
+                return foundOrder;
+            } else {
+                throw new OrderNotFoundException("Order not found with the given id " + id);
+            }
+
         } catch (IllegalArgumentException exception) {
-            return null;
+            throw new OrderRelatedException("Error getting the order method from the database.");
         }
     }
 
@@ -50,13 +59,9 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
                 }
             });
             order.setId(orderEntity.getId());
-            //entityManager.getTransaction().commit();
             return order;
         } catch (PersistenceException exception) {
-            //entityManager.getTransaction().rollback();
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-            return null;
+            throw new OrderRelatedException("Error saving the order to the database.");
         }
     }
 
@@ -69,9 +74,7 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             entityManager.getTransaction().commit();
             return true;
         } catch (PersistenceException exception) {
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-            return false;
+            throw new OrderRelatedException("Error deleting the order from the database.");
         }
     }
 
@@ -79,11 +82,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         try {
             return entityManager.merge(order);
         } catch (PersistenceException exception) {
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-            return null;
+            throw new OrderRelatedException("Error updating the order to the database.");
         }
     }
+
     public Order addOrderItem(Long id, ItemDto item){
         try{
             Order order = getOrderById(id);
@@ -94,9 +96,7 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             }
             return order;
         }catch(PersistenceException exception){
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-            return null;
+            throw new OrderRelatedException("Error adding order item to the database.");
         }
     }
     public Order updateOrderItem(Long id, ItemDto itemDto){
@@ -112,12 +112,13 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
                 }
                 currentItem.get().setSubTotal(itemDto.getUnits()* itemDto.getUnitPrice());
                 entityManager.merge(currentItem.get());
+            } else {
+                throw new OrderItemNotFoundException("Item with the following code"
+                        + itemDto.getCode() + " not found for the order.");
             }
             return order;
         }catch(PersistenceException exception){
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-           return null;
+            throw new OrderRelatedException("Error updating the order item into the database.");
         }
     }
 
@@ -138,9 +139,7 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             return mapToDto(order);
 
         }catch(PersistenceException exception){
-            System.out.println("Hubo alguna excepcion");
-            System.out.println(exception.getMessage());
-            return null;
+            throw new OrderRelatedException("Error deleting the order item from the database.");
         }
     }
     public OrderDto mapToDto(Order entity) {

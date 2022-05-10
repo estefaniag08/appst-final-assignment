@@ -5,6 +5,9 @@ import dev.applaudostudios.examples.finalassignment.common.Mappable;
 import dev.applaudostudios.examples.finalassignment.common.dto.AddressDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.PaymentDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.UserDto;
+import dev.applaudostudios.examples.finalassignment.common.exception.user.AddressNotExistException;
+import dev.applaudostudios.examples.finalassignment.common.exception.user.PaymentNotExistException;
+import dev.applaudostudios.examples.finalassignment.common.exception.user.UserRelatedException;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Address;
 import dev.applaudostudios.examples.finalassignment.persistence.model.PaymentMethod;
 import dev.applaudostudios.examples.finalassignment.persistence.model.User;
@@ -31,7 +34,7 @@ public class UserQueries implements Mappable<User, UserDto> {
             return mapToDto(session.bySimpleNaturalId(User.class).load(userEmail));
 
         } catch (PersistenceException exception) {
-            return null;
+            throw new UserRelatedException("Error getting the user from the database.");
         }
     }
 
@@ -40,30 +43,33 @@ public class UserQueries implements Mappable<User, UserDto> {
             User user = entityManager.find(User.class, userId);
             Optional<Address> address = user.getAddresses()
                     .stream().filter(addressItem -> addressItem.getId() == addressId).findFirst();
-            if(address.isPresent()){
+            if (address.isPresent()) {
                 return objectMapper.convertValue(address.get(), AddressDto.class);
-            } else{
-                return null;
+            } else {
+                throw new AddressNotExistException("There is no an address  with id " +
+                        addressId + " associated with the user");
             }
         } catch (PersistenceException exception) {
-            return null;
+            throw new UserRelatedException("Error getting the user address from the database.");
         }
     }
 
-    public PaymentDto getPaymentFromUserId(Long userId, Integer paymentId){
-        try{
+    public PaymentDto getPaymentFromUserId(Long userId, Integer paymentId) {
+        try {
             User user = entityManager.find(User.class, userId);
             Optional<PaymentMethod> payment = user.getPaymentMethods()
                     .stream().filter(paymentItem -> Objects.equals(paymentItem.getId(), paymentId)).findFirst();
-            if(payment.isPresent()){
+            if (payment.isPresent()) {
                 return objectMapper.convertValue(payment, PaymentDto.class);
             } else {
-                return null;
+                throw new PaymentNotExistException("There's no a payment method with id "+
+                        paymentId +" associated with the user");
             }
-        }catch(PersistenceException exception){
-            return null;
+        } catch (PersistenceException exception) {
+            throw new UserRelatedException("Error getting the user payment method from the database.");
         }
     }
+
     @Override
     public UserDto mapToDto(User entity) {
         return objectMapper.convertValue(entity, UserDto.class);
