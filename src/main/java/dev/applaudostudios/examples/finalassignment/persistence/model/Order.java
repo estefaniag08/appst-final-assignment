@@ -1,9 +1,7 @@
 package dev.applaudostudios.examples.finalassignment.persistence.model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Setter
+@Getter
 public class Order extends PersistenceEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +24,17 @@ public class Order extends PersistenceEntity{
     @PositiveOrZero
     private double orderTotal;
 
-    private UUID reservationCode;
-
-    private UUID verification;
-
     private UUID orderCode;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy="order")
+    private UUID reservationCode;
+
+    private UUID dispatchCode;
+
+    private UUID verificationCode;
+
+    //@org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    @OneToMany( mappedBy="order", orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderDetail> orderItems;
 
     @ManyToOne

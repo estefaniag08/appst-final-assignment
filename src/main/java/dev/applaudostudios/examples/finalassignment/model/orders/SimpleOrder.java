@@ -17,77 +17,80 @@ public class SimpleOrder {
     private UUID dispatchCode; //Para verificar dirección de entrega
     private UUID orderCode; //Sería como el id de la orden
 
-    public SimpleOrder(List<ItemDto> itemList){
+    public SimpleOrder(List<ItemDto> itemList) {
         orderList = new ItemOrderList(itemList);
     }
 
-    public boolean reserveOrder(){
+    public boolean reserveOrder() {
         new ReservedOrderState().handle(this);
         return this.reservationCode != null;
     }
 
-    public boolean validateOrder(UUID paymentId){
+    public boolean validateOrder(UUID paymentId) {
         VerifiedOrderState orderState = new VerifiedOrderState();
+        orderState.setPaymentId(paymentId);
         orderState.handle(this);
         return this.verificationCode != null;
     }
 
-    public boolean generateOrder(){
+    public boolean generateOrder() {
         new GeneratedOrderState().handle(this);
         return this.orderCode != null;
     }
 
-    public boolean generateDispatchCode(String postalCode){
+    public boolean generateDispatchCode(String postalCode) {
         DispatchOrderState orderState = new DispatchOrderState();
         orderState.setPostalCode(postalCode);
         orderState.handle(this);
         return this.dispatchCode != null;
     }
-    public class ItemOrderList{
+
+    public class ItemOrderList {
         private final List<ItemDto> listOfItems;
 
-        private ItemOrderList(List<ItemDto> listOfItems){
+        private ItemOrderList(List<ItemDto> listOfItems) {
             this.listOfItems = new ArrayList<>(listOfItems);
         }
 
-        public final Double getTotal(){
+        public final Double getTotal() {
             double total = 0.0;
-            for(ItemDto item: listOfItems){
+            for (ItemDto item : listOfItems) {
                 total += item.getUnitPrice() * item.getUnits();
             }
             return total;
         }
 
-        public final void saveItem(ItemDto item){
+        public final void saveItem(ItemDto item) {
             Optional<ItemDto> foundItem =
                     listOfItems.stream()
                             .filter(itemList -> Objects.equals(itemList, item))
                             .findFirst();
-            if(foundItem.isPresent()){
+            if (foundItem.isPresent()) {
                 //int units = foundItem.get().getUnits() + item.getUnits();
                 int units = item.getUnits();
                 foundItem.get().setUnits(units);
-                if(units <= 0){
+                if (units <= 0) {
                     deleteItem(foundItem.get());
                 }
             } else {
-                  listOfItems.add(item);
+                listOfItems.add(item);
             }
         }
 
-        public final boolean deleteItem(ItemDto item){
+        public final boolean deleteItem(ItemDto item) {
             Optional<ItemDto> foundItem =
                     listOfItems.stream()
                             .filter(itemList -> Objects.equals(itemList, item))
                             .findFirst();
-            if(foundItem.isPresent()){
+            if (foundItem.isPresent()) {
                 listOfItems.remove(foundItem.get());
                 return true;
             } else {
                 return false;
             }
         }
-        public final List<ItemDto> getListOfItems(){
+
+        public final List<ItemDto> getListOfItems() {
             return Collections.unmodifiableList(this.listOfItems);
         }
     }

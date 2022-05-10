@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Service
-@Transactional
 public class CheckoutService implements Mappable<Order, OrderDto> {
 
     @PersistenceContext
@@ -57,7 +55,7 @@ public class CheckoutService implements Mappable<Order, OrderDto> {
             item.setUnitPrice(product.getPricePerUnit());
 
             product.setStock(product.getStock()-item.getUnits());
-            productService.updateStock(productService.mapToDto(product));
+            //productService.reserveStock(productService.mapToDto(product));
 
             orderDetails.add(new OrderDetail(0, finalOrderEntity, product, item.getUnits(), item.getUnits()*item.getUnitPrice()));
            }

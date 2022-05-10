@@ -6,6 +6,7 @@ import java.util.UUID;
 @Setter
 public class VerifiedOrderState implements IOrderState{
     private UUID paymentId;
+
     @Override
     public void handle(SimpleOrder simpleOrder) {
         if(!paymentId.toString().isEmpty()){

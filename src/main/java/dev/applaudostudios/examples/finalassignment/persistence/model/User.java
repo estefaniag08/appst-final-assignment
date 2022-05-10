@@ -1,6 +1,7 @@
 package dev.applaudostudios.examples.finalassignment.persistence.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import org.hibernate.annotations.NaturalId;
 
@@ -36,8 +37,10 @@ public class User {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<PaymentMethod> paymentMethods;
 }

@@ -17,19 +17,27 @@ public class ProductService extends CrudRepositoryService<Product, ProductDto, L
         super(crudRepository);
     }
 
-    public boolean updateStock(ProductDto entityDto) {
-        Optional<ProductDto> foundEntity = this.get(entityDto.getId());
-        if(foundEntity.isPresent() && validateStock(foundEntity.get().getStock(), entityDto.getStock())){
-            foundEntity.get().setStock(entityDto.getStock());
-            super.update(foundEntity.get());
-            return true;
-        } else {
-            return false;
-        }
+    private void updateStock(ProductDto entityDto, int stock) {
+        entityDto.setStock(stock);
+        super.update(entityDto);
     }
 
-    private boolean validateStock(int currentStock, int newStock){
-        return newStock >= 0 && newStock < currentStock;
+    public boolean reserveStock(Long idProduct, int newStock){
+        Optional<ProductDto> foundEntity = this.get(idProduct);
+        if(newStock >= 0 && newStock<= foundEntity.get().getStock()){
+            updateStock(foundEntity.get(), foundEntity.get().getStock()- newStock);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean returnStock(Long idProduct, int stockToReturn){
+        Optional<ProductDto> foundEntity = this.get(idProduct);
+        if(stockToReturn >= 0 && foundEntity.isPresent()){
+            updateStock(foundEntity.get(), stockToReturn + foundEntity.get().getStock());
+            return true;
+        }
+        return false;
     }
     @Override
     public ProductDto mapToDto(Product entity) {

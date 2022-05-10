@@ -1,5 +1,6 @@
 package dev.applaudostudios.examples.finalassignment.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Address {
     private String receiverName;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 
 }

@@ -1,5 +1,6 @@
 package dev.applaudostudios.examples.finalassignment.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ public class PaymentMethod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int paymentMethodId;
+    private Integer id;
 
     @NotEmpty(message = "Payment method name cannot be null or empty.")
     private String paymentMethodName;
@@ -23,6 +24,7 @@ public class PaymentMethod {
     private UUID token;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 
 }
