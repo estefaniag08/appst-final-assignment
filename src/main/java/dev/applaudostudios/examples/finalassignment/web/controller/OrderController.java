@@ -4,6 +4,7 @@ import dev.applaudostudios.examples.finalassignment.common.dto.AddressDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.ItemDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.OrderDto;
 import dev.applaudostudios.examples.finalassignment.common.dto.PaymentDto;
+import dev.applaudostudios.examples.finalassignment.common.exception.RequestException;
 import dev.applaudostudios.examples.finalassignment.service.CheckoutService;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,14 +32,15 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createOrder(@RequestBody final OrderDto orderDto,
+    public ResponseEntity<?> createOrder(@RequestBody @Valid final OrderDto orderDto,
                                          final BindingResult bindingResult,
                                          final Authentication authentication) {
         if (bindingResult.hasErrors()) {
-            List<?> errors = bindingResult.getFieldErrors().stream().map(
+            System.out.println("Entra en errores.");
+            List<ObjectError> errors = bindingResult.getFieldErrors().stream().map(
                     objectError -> new ObjectError("User", "Error in " +
                             objectError.getField() + ". " + objectError.getDefaultMessage())).toList();
-            //throw new ResponseException("Error in some fields.", errors, HttpStatus.BAD_REQUEST);
+            throw new RequestException("Error in some fields.", errors);
         }
         String userEmail = getUserEmailFromAuthentication(authentication);
         return new ResponseEntity<>(checkoutServices.createOrder(userEmail, orderDto), HttpStatus.OK);
@@ -46,15 +49,15 @@ public class OrderController {
     }
 
     @RequestMapping(path = "{idOrder}/address", method = RequestMethod.PUT)
-    public ResponseEntity<?> saveAddressOfOrder(@RequestBody final AddressDto addressDto,
+    public ResponseEntity<?> saveAddressOfOrder(@RequestBody @Valid final AddressDto addressDto,
                                                 @PathVariable("idOrder") final Long idOrder,
                                                 final BindingResult bindingResult,
                                                 final Authentication authentication) {
         if (bindingResult.hasErrors()) {
-            List<?> errors = bindingResult.getFieldErrors().stream().map(
+            List<ObjectError> errors = bindingResult.getFieldErrors().stream().map(
                     objectError -> new ObjectError("User", "Error in " +
                             objectError.getField() + ". " + objectError.getDefaultMessage())).toList();
-            //throw new ResponseException("Error in some fields.", errors, HttpStatus.BAD_REQUEST);
+            throw new RequestException("Error in some fields.", errors);
         }
         String userEmail = getUserEmailFromAuthentication(authentication);
         return new ResponseEntity<>(checkoutServices.saveAddress(userEmail, idOrder, addressDto), HttpStatus.OK);
@@ -62,15 +65,15 @@ public class OrderController {
     }
 
     @RequestMapping(path = "{idOrder}/payment", method = RequestMethod.PUT)
-    public ResponseEntity<?> savePaymentOfOrder(@RequestBody final PaymentDto paymentDto,
+    public ResponseEntity<?> savePaymentOfOrder(@RequestBody final @Valid PaymentDto paymentDto,
                                                 @PathVariable("idOrder") final Long idOrder,
                                                 final BindingResult bindingResult,
                                                 final Authentication authentication) {
         if (bindingResult.hasErrors()) {
-            List<?> errors = bindingResult.getFieldErrors().stream().map(
+            List<ObjectError> errors = bindingResult.getFieldErrors().stream().map(
                     objectError -> new ObjectError("User", "Error in " +
                             objectError.getField() + ". " + objectError.getDefaultMessage())).toList();
-            //throw new ResponseException("Error in some fields.", errors, HttpStatus.BAD_REQUEST);
+            throw new RequestException("Error in some fields.", errors);
         }
         String userEmail = getUserEmailFromAuthentication(authentication);
         return new ResponseEntity<>(checkoutServices.savePaymentMethod(userEmail, idOrder, paymentDto), HttpStatus.OK);
@@ -78,15 +81,15 @@ public class OrderController {
     }
 
     @RequestMapping(path = "{idOrder}/item/", method = RequestMethod.POST)
-    public ResponseEntity<?> addItemToOrder(@RequestBody final ItemDto item,
+    public ResponseEntity<?> addItemToOrder(@RequestBody @Valid final ItemDto item,
                                             @PathVariable("idOrder") final Long idOrder,
                                             final BindingResult bindingResult,
                                             final Authentication authentication) {
         if (bindingResult.hasErrors()) {
-            List<?> errors = bindingResult.getFieldErrors().stream().map(
+            List<ObjectError> errors = bindingResult.getFieldErrors().stream().map(
                     objectError -> new ObjectError("User", "Error in " +
                             objectError.getField() + ". " + objectError.getDefaultMessage())).toList();
-            //throw new ResponseException("Error in some fields.", errors, HttpStatus.BAD_REQUEST);
+            throw new RequestException("Error in some fields.", errors);
         }
         String userEmail = getUserEmailFromAuthentication(authentication);
         return new ResponseEntity<>(checkoutServices.addOrderItem(userEmail, idOrder, item), HttpStatus.OK);
@@ -94,16 +97,16 @@ public class OrderController {
     }
 
     @RequestMapping(path = "{idOrder}/item/{idItem}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateItemOfOrder(@RequestBody final ItemDto item,
+    public ResponseEntity<?> updateItemOfOrder(@RequestBody @Valid final ItemDto item,
                                                @PathVariable("idOrder") final Long idOrder,
                                                @PathVariable("idItem") final Long idItem,
                                                final BindingResult bindingResult,
                                                final Authentication authentication) {
         if (bindingResult.hasErrors()) {
-            List<?> errors = bindingResult.getFieldErrors().stream().map(
+            List<ObjectError> errors = bindingResult.getFieldErrors().stream().map(
                     objectError -> new ObjectError("User", "Error in " +
                             objectError.getField() + ". " + objectError.getDefaultMessage())).toList();
-            //throw new ResponseException("Error in some fields.", errors, HttpStatus.BAD_REQUEST);
+            throw new RequestException("Error in some fields.", errors);
         }
         String userEmail = getUserEmailFromAuthentication(authentication);
         item.setCode(idItem);

@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -15,7 +14,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotNull(message = "The address cannot be null.")
     @NotEmpty(message = "The address cannot be empty.")
     private String address;
 

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Entity
@@ -21,12 +22,12 @@ public class Product extends PersistenceEntity{
     @NotEmpty( message = "The product name cannot be null or empty.")
     private String productName;
 
-    @NotEmpty( message = "The product stock cannot be null or empty.")
-    @PositiveOrZero
+    @NotNull( message = "The product stock cannot be null.")
+    @PositiveOrZero(message = "The product stock must be positive.")
     private int stock;
 
-    @NotEmpty( message = "The product price cannot be null or empty.")
-    @PositiveOrZero
+    @NotNull( message = "The product price cannot be null.")
+    @PositiveOrZero(message = "The product stock must be positive.")
     private double pricePerUnit;
 
 }

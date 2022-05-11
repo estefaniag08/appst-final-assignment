@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto extends Dto<Integer> {
-    @NotEmpty(message = "The id address can't be null or empty.")
+    //@NotEmpty(message = "The id address can't be null or empty.")
     private Integer id;
     //@NotEmpty(message = "Address cannot be null or empty.")
     //@Size(min = 4, message = "Address should be more longer (min 4). ")

@@ -92,6 +92,8 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         try {
             return entityManager.merge(order);
         } catch (PersistenceException exception) {
+            System.out.println(exception.getMessage());
+            System.out.println(exception.toString());
             List<String> listOfErrors = new ArrayList<>();
             listOfErrors.add("Error updating the order to the database.");
             listOfErrors.add(exception.getMessage());
@@ -109,6 +111,8 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             }
             return order;
         }catch(PersistenceException exception){
+            System.out.println(exception.getMessage());
+            System.out.println(exception.getCause().getMessage());
             List<String> listOfErrors = new ArrayList<>();
             listOfErrors.add("Error adding order item to the database.");
             listOfErrors.add(exception.getMessage());
@@ -155,7 +159,7 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
                 order.getOrderItems().remove(currentItem.get());
                 //entityManager.remove(currentItem.get());
                 order = entityManager.merge(order);
-                //entityManager.remove(currentItem.get());
+                entityManager.remove(currentItem.get());
                 //entityManager.detach(currentItem.get());
             }
             return mapToDto(order);
