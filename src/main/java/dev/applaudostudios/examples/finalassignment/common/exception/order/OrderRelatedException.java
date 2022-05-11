@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderRelatedException extends RuntimeException implements RestException {
+public class OrderRelatedException extends RestException {
     List<String> listOfErrors;
     public OrderRelatedException( List<String> listOfErrors) {
         super("Order related exception.");

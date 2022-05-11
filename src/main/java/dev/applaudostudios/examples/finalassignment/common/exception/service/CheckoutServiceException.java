@@ -6,14 +6,13 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutServiceException extends RuntimeException implements RestException {
+public class CheckoutServiceException extends RestException {
     List<String> listOfErrors;
     public CheckoutServiceException(String message) {
         super("Checkout service exception.");
         listOfErrors = new ArrayList<>();
         listOfErrors.add(message);
     }
-    //Me obligaron a hacer esto
     @Override
     public HttpStatus getStatusCode() {
         return HttpStatus.BAD_REQUEST;

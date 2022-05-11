@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductStockOutOfBoundException extends RuntimeException implements RestException {
+public class ProductStockOutOfBoundException extends RestException {
     List<String> listOfErrors;
     public ProductStockOutOfBoundException(String message) {
         super("Product exception.");

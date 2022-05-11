@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-public class UserRelatedException extends RuntimeException implements RestException {
+public class UserRelatedException extends RestException {
 
     public UserRelatedException(String message) {
         super(message);

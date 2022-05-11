@@ -4,7 +4,13 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-public interface RestException{
-    HttpStatus getStatusCode();
-    List<?> getErrors();
+public abstract class RestException extends RuntimeException{
+
+    public RestException(String message) {
+        super(message);
+    }
+
+    public abstract HttpStatus getStatusCode();
+    public abstract List<?> getErrors();
+
 }

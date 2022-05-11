@@ -98,7 +98,7 @@ public class CheckoutService {
                     return null;
                 }
             } else {
-                throw new CheckoutServiceException("Order item with code" + itemDto.getCode() + "");
+                throw new CheckoutServiceException("Order item with code " + itemDto.getCode() + "does not exists");
             }
         }
         return null;
