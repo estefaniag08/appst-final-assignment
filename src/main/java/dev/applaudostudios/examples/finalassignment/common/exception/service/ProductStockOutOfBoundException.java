@@ -6,22 +6,19 @@ import org.springframework.http.HttpStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutServiceException extends RuntimeException implements RestException {
+public class ProductStockOutOfBoundException extends RuntimeException implements RestException {
     List<String> listOfErrors;
-
-    public CheckoutServiceException(String message) {
-        super("Checkout service exception.");
+    public ProductStockOutOfBoundException(String message) {
+        super("Product exception.");
         listOfErrors = new ArrayList<>();
         listOfErrors.add(message);
     }
-
     @Override
     public HttpStatus getStatusCode() {
         return HttpStatus.BAD_REQUEST;
     }
-
     @Override
     public List<?> getErrors() {
-        return this.listOfErrors;
+        return listOfErrors;
     }
 }

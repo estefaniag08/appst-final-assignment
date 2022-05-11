@@ -38,11 +38,16 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             if(foundOrder != null){
                 return foundOrder;
             } else {
-                throw new OrderNotFoundException("Order not found with the given id " + id);
+                List<String> listOfErrors = new ArrayList<>();
+                listOfErrors.add("Order not found with the given id " + id);
+                throw new OrderNotFoundException(listOfErrors);
             }
 
         } catch (IllegalArgumentException exception) {
-            throw new OrderRelatedException("Error getting the order method from the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error getting the order method from the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
 
@@ -61,7 +66,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             order.setId(orderEntity.getId());
             return order;
         } catch (PersistenceException exception) {
-            throw new OrderRelatedException("Error saving the order to the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error saving the order to the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
 
@@ -71,10 +79,12 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             if (order != null) {
                 entityManager.remove(order);
             }
-            entityManager.getTransaction().commit();
             return true;
         } catch (PersistenceException exception) {
-            throw new OrderRelatedException("Error deleting the order from the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error deleting the order from the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
 
@@ -82,7 +92,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         try {
             return entityManager.merge(order);
         } catch (PersistenceException exception) {
-            throw new OrderRelatedException("Error updating the order to the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error updating the order to the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
 
@@ -96,7 +109,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             }
             return order;
         }catch(PersistenceException exception){
-            throw new OrderRelatedException("Error adding order item to the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error adding order item to the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
     public Order updateOrderItem(Long id, ItemDto itemDto){
@@ -113,12 +129,17 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
                 currentItem.get().setSubTotal(itemDto.getUnits()* itemDto.getUnitPrice());
                 entityManager.merge(currentItem.get());
             } else {
-                throw new OrderItemNotFoundException("Item with the following code"
+                List<String> listOfErrors = new ArrayList<>();
+                listOfErrors.add("Item with the following code"
                         + itemDto.getCode() + " not found for the order.");
+                throw new OrderItemNotFoundException(listOfErrors);
             }
             return order;
         }catch(PersistenceException exception){
-            throw new OrderRelatedException("Error updating the order item into the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error updating the order item into the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
 
@@ -128,10 +149,11 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             Optional<OrderDetail> currentItem = order.getOrderItems().stream()
                     .filter(item -> item.getId() == codeId).findFirst();
             if(currentItem.isPresent()){
-                List <OrderDetail> orderDetailsList = order.getOrderItems();
-                orderDetailsList.remove(currentItem.get());
-                order.setOrderItems(orderDetailsList);
-
+                //List <OrderDetail> orderDetailsList = order.getOrderItems();
+                //orderDetailsList.remove(currentItem.get());
+                //order.setOrderItems(orderDetailsList);
+                order.getOrderItems().remove(currentItem.get());
+                //entityManager.remove(currentItem.get());
                 order = entityManager.merge(order);
                 //entityManager.remove(currentItem.get());
                 //entityManager.detach(currentItem.get());
@@ -139,7 +161,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             return mapToDto(order);
 
         }catch(PersistenceException exception){
-            throw new OrderRelatedException("Error deleting the order item from the database.");
+            List<String> listOfErrors = new ArrayList<>();
+            listOfErrors.add("Error deleting the order item from the database.");
+            listOfErrors.add(exception.getMessage());
+            throw new OrderRelatedException(listOfErrors);
         }
     }
     public OrderDto mapToDto(Order entity) {

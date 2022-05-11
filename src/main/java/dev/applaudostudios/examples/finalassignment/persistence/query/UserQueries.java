@@ -38,9 +38,9 @@ public class UserQueries implements Mappable<User, UserDto> {
         }
     }
 
-    public AddressDto getAddressFromUserId(Long userId, Integer addressId) {
+    public AddressDto getAddressFromUser(UserDto userDto, Integer addressId) {
+        User user = entityManager.find(User.class, userDto.getId());
         try {
-            User user = entityManager.find(User.class, userId);
             Optional<Address> address = user.getAddresses()
                     .stream().filter(addressItem -> addressItem.getId() == addressId).findFirst();
             if (address.isPresent()) {
@@ -54,9 +54,9 @@ public class UserQueries implements Mappable<User, UserDto> {
         }
     }
 
-    public PaymentDto getPaymentFromUserId(Long userId, Integer paymentId) {
+    public PaymentDto getPaymentFromUser(UserDto userDto, Integer paymentId) {
         try {
-            User user = entityManager.find(User.class, userId);
+            User user = entityManager.find(User.class, userDto.getId());
             Optional<PaymentMethod> payment = user.getPaymentMethods()
                     .stream().filter(paymentItem -> Objects.equals(paymentItem.getId(), paymentId)).findFirst();
             if (payment.isPresent()) {

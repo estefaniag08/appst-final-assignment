@@ -45,7 +45,7 @@ public class SimpleOrder {
         return this.dispatchCode != null;
     }
 
-    public class ItemOrderList {
+    public static class ItemOrderList {
         private final List<ItemDto> listOfItems;
 
         private ItemOrderList(List<ItemDto> listOfItems) {

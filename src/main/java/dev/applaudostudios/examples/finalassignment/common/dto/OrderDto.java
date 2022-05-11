@@ -9,7 +9,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class OrderDto extends Dto<Long>{
     private Long id;
     @NotEmpty(message = "The list of items cannot be empty.")

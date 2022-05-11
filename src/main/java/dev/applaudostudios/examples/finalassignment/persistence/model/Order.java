@@ -32,7 +32,6 @@ public class Order extends PersistenceEntity{
 
     private UUID verificationCode;
 
-    //@org.hibernate.annotations.Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     @OneToMany( mappedBy="order", orphanRemoval = true)
     @JsonManagedReference
     private List<OrderDetail> orderItems;

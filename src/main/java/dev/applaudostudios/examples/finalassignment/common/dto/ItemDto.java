@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class ItemDto extends Dto<Long> {
     @EqualsAndHashCode.Include

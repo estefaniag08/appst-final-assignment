@@ -2,7 +2,7 @@ package dev.applaudostudios.examples.finalassignment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.applaudostudios.examples.finalassignment.common.dto.ProductDto;
-import dev.applaudostudios.examples.finalassignment.common.exception.product.ProductStockOutOfBoundException;
+import dev.applaudostudios.examples.finalassignment.common.exception.service.ProductStockOutOfBoundException;
 import dev.applaudostudios.examples.finalassignment.persistence.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;

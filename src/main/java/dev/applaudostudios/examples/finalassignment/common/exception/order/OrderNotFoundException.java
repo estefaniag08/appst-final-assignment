@@ -2,9 +2,11 @@ package dev.applaudostudios.examples.finalassignment.common.exception.order;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 public class OrderNotFoundException extends OrderRelatedException {
-    public OrderNotFoundException(String message) {
-        super(message);
+    public OrderNotFoundException(List<String> listOfErrors) {
+        super(listOfErrors);
     }
 
     @Override
