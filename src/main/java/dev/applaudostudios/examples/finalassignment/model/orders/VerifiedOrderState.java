@@ -9,7 +9,7 @@ public class VerifiedOrderState implements IOrderState{
 
     @Override
     public void handle(SimpleOrder simpleOrder) {
-        if(!paymentId.toString().isEmpty()){
+        if(paymentId != null && !paymentId.toString().isEmpty()){
             UUID uuid = UUID.randomUUID();
             simpleOrder.setVerificationCode(uuid);
         }

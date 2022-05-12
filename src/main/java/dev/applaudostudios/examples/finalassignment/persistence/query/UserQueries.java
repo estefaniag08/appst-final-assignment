@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -55,10 +54,10 @@ public class UserQueries implements Mappable<User, UserDto> {
     }
 
     public PaymentDto getPaymentFromUser(UserDto userDto, Integer paymentId) {
+        User user = entityManager.find(User.class, userDto.getId());
         try {
-            User user = entityManager.find(User.class, userDto.getId());
             Optional<PaymentMethod> payment = user.getPaymentMethods()
-                    .stream().filter(paymentItem -> Objects.equals(paymentItem.getId(), paymentId)).findFirst();
+                    .stream().filter(paymentItem -> paymentItem.getId() == paymentId).findFirst();
             if (payment.isPresent()) {
                 return objectMapper.convertValue(payment, PaymentDto.class);
             } else {

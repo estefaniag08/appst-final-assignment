@@ -1,25 +1,21 @@
 package dev.applaudostudios.examples.finalassignment.config;
 
 import dev.applaudostudios.examples.finalassignment.model.orders.OrderFacade;
-import dev.applaudostudios.examples.finalassignment.persistence.repository.ProductRepository;
-import dev.applaudostudios.examples.finalassignment.service.CheckoutService;
-import dev.applaudostudios.examples.finalassignment.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WebConfiguration {
 
-    @Autowired
-    ProductService productService(ProductRepository productRepository){
-        return new ProductService(productRepository);
-    }
+    //@Autowired
+    //ProductService productService(ProductRepository productRepository){
+    //    return new ProductService(productRepository);
+    //}
 
-    @Autowired
-    CheckoutService checkoutService(ProductService productService){
-        return new CheckoutService(productService);
-    }
+   // @Autowired
+   // CheckoutService checkoutService(ProductService productService){
+   //     return new CheckoutService(productService);
+    //}
 
     @Bean
     OrderFacade orderFacade(){

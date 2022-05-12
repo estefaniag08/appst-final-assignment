@@ -8,7 +8,7 @@ public class DispatchOrderState implements IOrderState{
     private String postalCode;
     @Override
     public void handle(SimpleOrder simpleOrder) {
-        if(!postalCode.trim().isEmpty()){
+        if(postalCode != null && !postalCode.trim().isEmpty()){
             UUID uuid = UUID.randomUUID();
             simpleOrder.setDispatchCode(uuid);
         }

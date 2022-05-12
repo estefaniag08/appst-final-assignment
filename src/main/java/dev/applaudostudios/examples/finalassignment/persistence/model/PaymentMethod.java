@@ -2,6 +2,7 @@ package dev.applaudostudios.examples.finalassignment.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 public class PaymentMethod {
 
     @Id

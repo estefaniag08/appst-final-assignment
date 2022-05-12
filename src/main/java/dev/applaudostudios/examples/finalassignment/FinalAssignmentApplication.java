@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-//@EnableWebMvc
 @ComponentScan("dev.applaudostudios.examples.finalassignment.*")
 public class FinalAssignmentApplication {
 

@@ -1,6 +1,5 @@
 package dev.applaudostudios.examples.finalassignment.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.applaudostudios.examples.finalassignment.common.dto.*;
 import dev.applaudostudios.examples.finalassignment.common.exception.service.CheckoutServiceException;
 import dev.applaudostudios.examples.finalassignment.common.exception.service.ForbbidenOrderAccess;
@@ -18,9 +17,8 @@ import java.util.Optional;
 
 @Service
 public class CheckoutService {
-    private final ProductService productService;
     @Autowired
-    private ObjectMapper objectMapper;
+    private ProductService productService;
     @Autowired
     private UserQueries userQueries;
     @Autowired
@@ -28,9 +26,9 @@ public class CheckoutService {
     @Autowired
     private OrderFacade orderFacade;
 
-    public CheckoutService(ProductService productService) {
-        this.productService = productService;
-    }
+    //public CheckoutService(ProductService productService) {
+    //    this.productService = productService;
+    //}
 
     public OrderDto createOrder(String userEmailAddress, OrderDto orderDto) {
         UserDto user = userQueries.getUserFromEmail(userEmailAddress);
@@ -55,8 +53,8 @@ public class CheckoutService {
     public OrderDto saveAddress(String userEmailAddress, Long orderId, AddressDto addressDto) {
         UserDto user = userQueries.getUserFromEmail(userEmailAddress);
         OrderDto order = findOrderById(orderId);
-        if(orderIsOfUser(order, user.getEmail())){
-            AddressDto address = userQueries.getAddressFromUser(user, addressDto.getId());
+        AddressDto address = userQueries.getAddressFromUser(user, addressDto.getId());
+        if(orderIsOfUser(order, user.getEmail()) && address!= null){
             order.setAddress(address);
             order = orderFacade.generateDispatchCode(order);
         }
@@ -112,8 +110,6 @@ public class CheckoutService {
             updateStockFromItemList(itemList);
             if (currentItem.isEmpty()) {
                 orderFacade.saveItemToOrder(order, itemList.get(0));
-                System.out.println(order);
-                System.out.println("Funciona todavía");
                 orderQueries.addOrderItem(order, itemList.get(0));
                 return orderQueries.mapToDto(orderQueries.updateOrder(orderId, order));
             } else {
@@ -125,30 +121,33 @@ public class CheckoutService {
 
     public OrderDto deleteOrderItem(String userEmailAddress,Long orderId, Long itemId) {
         OrderDto order = orderQueries.mapToDto(orderQueries.getOrderById(orderId));
-        Optional<ItemDto> currentItem = order.getOrderItems().stream()
-                .filter(item -> Objects.equals(item.getCode(), itemId)
-                ).findFirst();
-        if (currentItem.isPresent()) {
-            Optional<ProductDto> product = productService.get(currentItem.get().getCode());
-            if (product.isPresent()) {
-                productService.returnStock(product.get().getId(), currentItem.get().getUnits());
-            }
-            orderFacade.deleteItemFromOrder(order, currentItem.get());
-            order = orderQueries.deleteOrderItem(orderId,itemId);
-            orderQueries.updateOrder(orderId, order);
-            if(order.getOrderItems().isEmpty()){
-                deleteOrder(orderId);
-                return null;
+        if(orderIsOfUser(order, userEmailAddress) && orderNotChecked(order)){
+            Optional<ItemDto> currentItem = order.getOrderItems().stream()
+                    .filter(item -> Objects.equals(item.getCode(), itemId)
+                    ).findFirst();
+            if (currentItem.isPresent()) {
+                Optional<ProductDto> product = productService.get(currentItem.get().getCode());
+                if (product.isPresent()) {
+                    productService.returnStock(product.get().getId(), currentItem.get().getUnits());
+                }
+                orderFacade.deleteItemFromOrder(order, currentItem.get());
+                order = orderQueries.deleteOrderItem(orderId,itemId);
+                orderQueries.updateOrder(orderId, order);
+                if(order.getOrderItems().isEmpty()){
+                    deleteOrder(orderId);
+                    return null;
+                } else {
+                    return order;
+                }
             } else {
-                return order;
+                throw new CheckoutServiceException("Order item with code " + itemId + "does not exists");
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void deleteOrder(Long orderId){
-        System.out.println("Entra dentro.");
+
         OrderDto order = findOrderById(orderId);
         if(order != null){
             for(ItemDto item: order.getOrderItems()

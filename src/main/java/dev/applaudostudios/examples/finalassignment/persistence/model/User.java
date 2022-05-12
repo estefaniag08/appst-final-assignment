@@ -3,6 +3,7 @@ package dev.applaudostudios.examples.finalassignment.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_store")
 @Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

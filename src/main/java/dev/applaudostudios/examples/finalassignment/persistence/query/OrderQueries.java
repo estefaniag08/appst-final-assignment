@@ -70,9 +70,8 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
             List<String> listOfErrors = new ArrayList<>();
             listOfErrors.add("Error saving the order to the database.");
             listOfErrors.add(exception.getMessage());
-            //throw new OrderRelatedException(listOfErrors);
+            throw new OrderRelatedException(listOfErrors);
         }
-        return null;
     }
 
     public boolean deleteOrder(Long id) {
@@ -94,9 +93,6 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         try {
             return entityManager.merge(mapToEntity(order));
         } catch (PersistenceException exception) {
-            System.out.println("Entra acá.");
-            System.out.println(exception.getMessage());
-            System.out.println(exception.toString());
             List<String> listOfErrors = new ArrayList<>();
             listOfErrors.add("Error updating the order to the database.");
             listOfErrors.add(exception.getMessage());
@@ -114,8 +110,6 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
                         product.get(), item.getUnits(), item.getUnits() * item.getUnitPrice()));
                 //entityManager.merge(order);
             }
-            //System.out.println(order);
-            //return order;
         }catch(PersistenceException exception){
             System.out.println("Entra acá en add order item");
             System.out.println(exception.getMessage());
