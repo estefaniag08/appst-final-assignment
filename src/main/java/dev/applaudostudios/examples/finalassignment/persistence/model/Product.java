@@ -19,10 +19,10 @@ public class Product extends PersistenceEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty( message = "The product name cannot be null or empty.")
+    @NotEmpty(message = "The product name cannot be null or empty.")
     private String productName;
 
-    @NotNull( message = "The product stock cannot be null.")
+    @NotNull(message = "The product stock cannot be null.")
     @PositiveOrZero(message = "The product stock must be positive.")
     private int stock;
 

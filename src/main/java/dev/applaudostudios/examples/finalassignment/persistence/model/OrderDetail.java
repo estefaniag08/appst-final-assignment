@@ -1,10 +1,7 @@
 package dev.applaudostudios.examples.finalassignment.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -15,13 +12,14 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JsonBackReference
     private Order order;
 
@@ -34,4 +32,10 @@ public class OrderDetail {
     @PositiveOrZero
     private double subTotal;
 
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "id=" + id +
+                '}';
+    }
 }

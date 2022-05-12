@@ -9,10 +9,11 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class ItemDto extends Dto<Long> {
     @EqualsAndHashCode.Include
-    @NotNull(message = "The item code can't be null or empty.")
+    //@NotNull(message = "The item code can't be null or empty.")
     @PositiveOrZero(message = "The item code must be a positive number.")
     private Long code;
     private String name;

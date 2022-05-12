@@ -11,14 +11,12 @@ import dev.applaudostudios.examples.finalassignment.persistence.query.UserQuerie
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class CheckoutService {
     private final ProductService productService;
     @Autowired
@@ -62,7 +60,7 @@ public class CheckoutService {
             order.setAddress(address);
             order = orderFacade.generateDispatchCode(order);
         }
-        return orderQueries.mapToDto(orderQueries.updateOrder(orderId, orderQueries.mapToEntity(order)));
+        return orderQueries.mapToDto(orderQueries.updateOrder(orderId, order));
     }
 
     public OrderDto savePaymentMethod(String userEmailAddress, Long orderId, PaymentDto paymentMethod) {
@@ -73,7 +71,7 @@ public class CheckoutService {
             order.setPaymentMethod(paymentDto);
             order = orderFacade.verifyOrder(order);
         }
-        return orderQueries.mapToDto(orderQueries.updateOrder(orderId, orderQueries.mapToEntity(order)));
+        return orderQueries.mapToDto(orderQueries.updateOrder(orderId, order));
     }
 
     public OrderDto updateOrderItemStock(String userEmailAddress, Long orderId, ItemDto itemDto) {
@@ -92,10 +90,9 @@ public class CheckoutService {
                     }
                     orderFacade.saveItemToOrder(order, itemDto);
                     orderQueries.mapToDto(orderQueries.updateOrderItem(orderId, itemDto));
-                    return orderQueries.mapToDto(orderQueries.updateOrder(orderId, orderQueries.mapToEntity(order)));
+                    return orderQueries.mapToDto(orderQueries.updateOrder(orderId, order));
                 } else {
-                    //deleteOrderItem(orderId, itemDto.getId());
-                    return null;
+                    return deleteOrderItem(userEmailAddress, orderId, itemDto.getId());
                 }
             } else {
                 throw new CheckoutServiceException("Order item with code " + itemDto.getCode() + "does not exists");
@@ -115,8 +112,10 @@ public class CheckoutService {
             updateStockFromItemList(itemList);
             if (currentItem.isEmpty()) {
                 orderFacade.saveItemToOrder(order, itemList.get(0));
-                orderQueries.mapToDto(orderQueries.addOrderItem(orderId, itemList.get(0)));
-                return orderQueries.mapToDto(orderQueries.updateOrder(orderId, orderQueries.mapToEntity(order)));
+                System.out.println(order);
+                System.out.println("Funciona todavía");
+                orderQueries.addOrderItem(order, itemList.get(0));
+                return orderQueries.mapToDto(orderQueries.updateOrder(orderId, order));
             } else {
                 throw new CheckoutServiceException("The order item with the given id already exists.");
             }
@@ -136,7 +135,7 @@ public class CheckoutService {
             }
             orderFacade.deleteItemFromOrder(order, currentItem.get());
             order = orderQueries.deleteOrderItem(orderId,itemId);
-            orderQueries.updateOrder(orderId, orderQueries.mapToEntity(order));
+            orderQueries.updateOrder(orderId, order);
             if(order.getOrderItems().isEmpty()){
                 deleteOrder(orderId);
                 return null;
@@ -149,6 +148,7 @@ public class CheckoutService {
     }
 
     public void deleteOrder(Long orderId){
+        System.out.println("Entra dentro.");
         OrderDto order = findOrderById(orderId);
         if(order != null){
             for(ItemDto item: order.getOrderItems()

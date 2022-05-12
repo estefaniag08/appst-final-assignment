@@ -1,9 +1,6 @@
 package dev.applaudostudios.examples.finalassignment.common.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -12,6 +9,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class OrderDto extends Dto<Long>{
     private Long id;
 

@@ -53,24 +53,26 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
 
     public OrderDto createOrder(OrderDto order) {
         try {
-            Order orderEntity = mapToEntity(order);
+            Order orderEntity = objectMapper.convertValue(order, Order.class);
             orderEntity.setId(null);
             entityManager.persist(orderEntity);
             order.getOrderItems().forEach(item -> {
                 Optional<Product> product = productRepository.findById(item.getCode());
                 if(product.isPresent()){
-                    entityManager.persist(new OrderDetail(0, orderEntity,
+                    entityManager.persist(new OrderDetail(null, orderEntity,
                             product.get(), item.getUnits(), item.getUnits() * item.getUnitPrice()));
                 }
             });
             order.setId(orderEntity.getId());
             return order;
         } catch (PersistenceException exception) {
+            System.out.println(exception.getMessage());
             List<String> listOfErrors = new ArrayList<>();
             listOfErrors.add("Error saving the order to the database.");
             listOfErrors.add(exception.getMessage());
-            throw new OrderRelatedException(listOfErrors);
+            //throw new OrderRelatedException(listOfErrors);
         }
+        return null;
     }
 
     public boolean deleteOrder(Long id) {
@@ -88,10 +90,11 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         }
     }
 
-    public Order updateOrder(Long id, Order order) {
+    public Order updateOrder(Long id, OrderDto order) {
         try {
-            return entityManager.merge(order);
+            return entityManager.merge(mapToEntity(order));
         } catch (PersistenceException exception) {
+            System.out.println("Entra acá.");
             System.out.println(exception.getMessage());
             System.out.println(exception.toString());
             List<String> listOfErrors = new ArrayList<>();
@@ -101,16 +104,20 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         }
     }
 
-    public Order addOrderItem(Long id, ItemDto item){
+    public void addOrderItem(OrderDto orderServ, ItemDto item){
         try{
-            Order order = getOrderById(id);
+            Order order = getOrderById(orderServ.getId());
             Optional<Product> product = productRepository.findById(item.getCode());
             if(product.isPresent()){
-                entityManager.persist(new OrderDetail(0, order,
+                System.out.println("Encuentra el producto.");
+                entityManager.persist(new OrderDetail(null, order,
                         product.get(), item.getUnits(), item.getUnits() * item.getUnitPrice()));
+                //entityManager.merge(order);
             }
-            return order;
+            //System.out.println(order);
+            //return order;
         }catch(PersistenceException exception){
+            System.out.println("Entra acá en add order item");
             System.out.println(exception.getMessage());
             System.out.println(exception.getCause().getMessage());
             List<String> listOfErrors = new ArrayList<>();
@@ -151,16 +158,10 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
         try{
             Order order = getOrderById(id);
             Optional<OrderDetail> currentItem = order.getOrderItems().stream()
-                    .filter(item -> item.getId() == codeId).findFirst();
+                    .filter(item -> Objects.equals(item.getProduct().getId(), codeId)).findFirst();
             if(currentItem.isPresent()){
-                //List <OrderDetail> orderDetailsList = order.getOrderItems();
-                //orderDetailsList.remove(currentItem.get());
-                //order.setOrderItems(orderDetailsList);
                 order.getOrderItems().remove(currentItem.get());
-                //entityManager.remove(currentItem.get());
-                order = entityManager.merge(order);
                 entityManager.remove(currentItem.get());
-                //entityManager.detach(currentItem.get());
             }
             return mapToDto(order);
 
@@ -185,6 +186,20 @@ public class OrderQueries implements Mappable<Order, OrderDto> {
     }
 
     public Order mapToEntity(OrderDto entityDto) {
-        return objectMapper.convertValue(entityDto, Order.class);
+        List<OrderDetail> listOfItems = new ArrayList<>();
+        for(ItemDto item: entityDto.getOrderItems()){
+            listOfItems.add(findOrderDetail(entityDto.getId(), item.getCode()));
+        }
+        Order order = objectMapper.convertValue(entityDto, Order.class);
+        order.setOrderItems(listOfItems);
+
+        return order;
+    }
+
+    public OrderDetail findOrderDetail(Long orderId, Long code){
+        OrderDetail orderDetail = entityManager.createQuery("SELECT od FROM OrderDetail od WHERE od.order.id = :orderId AND od.product.id = :code", OrderDetail.class)
+                .setParameter("orderId", orderId)
+                .setParameter("code", code).getSingleResult();
+        return  orderDetail;
     }
 }

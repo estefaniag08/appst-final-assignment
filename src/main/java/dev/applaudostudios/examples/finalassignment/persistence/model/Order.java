@@ -3,8 +3,6 @@ package dev.applaudostudios.examples.finalassignment.persistence.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.applaudostudios.examples.finalassignment.persistence.UUIDValidator;
 import lombok.*;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -36,21 +34,18 @@ public class Order extends PersistenceEntity{
     @UUIDValidator
     private UUID verificationCode;
 
-    @OneToMany( mappedBy="order", orphanRemoval = true)
-    @NotFound(action= NotFoundAction.IGNORE)
+    @OneToMany(mappedBy="order", fetch = FetchType.EAGER)
     @JsonManagedReference
     @NotEmpty(message = "Order item list can't be empty or null.")
     private List<OrderDetail> orderItems;
 
     @ManyToOne
-    //@NotNull(message = "Address cannot be null or empty.")
     private Address address;
 
     @ManyToOne
-    //@NotEmpty(message = "Payment method cannot be null or empty.")
     private PaymentMethod paymentMethod;
 
     @ManyToOne
-    @NotNull(message = "Order user can't be null")
+    @NotNull(message = "Order user can't be null.")
     private User user;
 }

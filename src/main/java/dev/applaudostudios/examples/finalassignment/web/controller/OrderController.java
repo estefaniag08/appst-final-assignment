@@ -16,11 +16,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+@Transactional
 public class OrderController {
     @Autowired
     CheckoutService checkoutServices;
